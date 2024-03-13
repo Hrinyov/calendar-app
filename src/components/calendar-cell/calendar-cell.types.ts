@@ -1,6 +1,4 @@
-export interface Task {
-  id: string;
-  title: string;
-  dueDate: Date;
-  color?: string;
+export interface CalendarDayProps {
+  date: Date;
+  today: boolean;
 }
