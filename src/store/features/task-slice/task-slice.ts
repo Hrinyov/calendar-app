@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { TasksState, MoveTaskInArray, MoveTaskOutArray } from "./task-slice.types";
+import { TasksState, AddTask, EditTask, DeleteTask, MoveTaskInArray, MoveTaskOutArray } from "./task-slice.types";
 
 const initialState: TasksState = {
   "2024-03-15": [
@@ -18,7 +18,7 @@ export const TasksSlice = createSlice({
       action: PayloadAction<{ year: number; month: number }>
     ) => {
       const { year, month } = action.payload;
-      const numberOfDays = new Date(year, month, 0).getDate(); // Gets the last day of the given month
+      const numberOfDays = new Date(year, month, 0).getDate();
       for (let day = 1; day <= numberOfDays; day++) {
         const dateKey = `${year}-${month.toString().padStart(2, "0")}-${day
           .toString()
@@ -28,10 +28,31 @@ export const TasksSlice = createSlice({
         }
       }
     },
-    addTask: (state, action) => {
-      // Example of immutably adding a task
+    addTask: (state, action: PayloadAction<AddTask>) => {
       const { dayKey, task } = action.payload;
       state[dayKey] = [...state[dayKey], task];
+    },
+    editTask: (
+      state,
+      action: PayloadAction<EditTask>
+    ) => {
+      const { dayKey, editedTask } = action.payload;
+      const taskIndex = state[dayKey].findIndex((task) => task.id === editedTask.id );
+      console.log(taskIndex)
+     if (taskIndex !== -1) {
+       state[dayKey][taskIndex] = {
+         ...state[dayKey][taskIndex],
+         ...editedTask,
+       };
+     }
+    },
+    deleteTask: (state, action: PayloadAction<DeleteTask>) => {
+     const { dayKey, deletedTaskId } = action.payload;
+     const taskIndex = state[dayKey].findIndex(
+      (task) => task.id === deletedTaskId
+     );
+     if (taskIndex === -1) return;
+      state[dayKey].splice(taskIndex, 1);
     },
     moveTaskInArray: (state, action: PayloadAction<MoveTaskInArray>) => {
       const { taskId, sourceDate, destinationDate, destinationIndex } =
@@ -55,7 +76,6 @@ export const TasksSlice = createSlice({
     },
     moveTaskOutArray: (state, action: PayloadAction<MoveTaskOutArray>) => {
       const { taskId, sourceDate, destinationDate } = action.payload;
-      console.log(action.payload)
 
       // Remove the task from the source date
       const taskIndex = state[sourceDate]?.findIndex(
@@ -70,15 +90,12 @@ export const TasksSlice = createSlice({
             state[destinationDate] = [];
           }
           state[destinationDate].push(task);
-        } else state[sourceDate].push(task)
-
-        // Optional: handle "unassigned" or non-date-specific logic here
+        } else state[sourceDate].push(task);
       }
     },
-    // Add other reducers as needed (removeTask, updateTask, etc.)
   },
 });
 
-export const { initDailyTaskArray, addTask, moveTaskInArray, moveTaskOutArray } = TasksSlice.actions;
+export const { initDailyTaskArray, addTask, editTask, deleteTask, moveTaskInArray, moveTaskOutArray } = TasksSlice.actions;
 
 export default TasksSlice.reducer;
