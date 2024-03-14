@@ -1,13 +1,8 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { TasksState, AddTask, EditTask, DeleteTask, MoveTaskInArray, MoveTaskOutArray } from "./task-slice.types";
+import { DUMMY_DATA } from "../../../utils/constants/constants";
 
-const initialState: TasksState = {
-  "2024-03-15": [
-    { id: "task-1", title: "Task 1", color: "#e74c3c" },
-    { id: "task-2", title: "Task 2", color: "#3498db" },
-    { id: "task-3", title: "Task 3", color: "#3498db" },
-  ],
-};
+const initialState: TasksState = DUMMY_DATA;
 
 export const TasksSlice = createSlice({
   name: "tasks",
@@ -58,33 +53,27 @@ export const TasksSlice = createSlice({
       const { taskId, sourceDate, destinationDate, destinationIndex } =
         action.payload;
 
-      // Find and remove the task from the source date
       const taskIndex = state[sourceDate].findIndex(
         (task) => task.id === taskId
       );
-      if (taskIndex === -1) return; // Task not found in source date
+      if (taskIndex === -1) return; 
       const [task] = state[sourceDate].splice(taskIndex, 1);
 
-      // If the destination date does not exist, initialize it
       if (!state[destinationDate]) {
         state[destinationDate] = [];
       }
 
-      // Insert the task into the destination date at the specified index
-      // This also handles reordering within the same date
       state[destinationDate].splice(destinationIndex, 0, task);
     },
     moveTaskOutArray: (state, action: PayloadAction<MoveTaskOutArray>) => {
       const { taskId, sourceDate, destinationDate } = action.payload;
 
-      // Remove the task from the source date
       const taskIndex = state[sourceDate]?.findIndex(
         (task) => task.id === taskId
       );
       if (taskIndex !== -1) {
         const [task] = state[sourceDate].splice(taskIndex, 1);
 
-        // If a destination date is provided, move the task there
         if (destinationDate) {
           if (!state[destinationDate]) {
             state[destinationDate] = [];
