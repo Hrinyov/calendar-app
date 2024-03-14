@@ -1,3 +1,4 @@
+import { nanoid } from "@reduxjs/toolkit";
 export const DAYS_OF_WEEK = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
 export const MONTH_NAMES = [
   "January",
@@ -23,3 +24,10 @@ export const COLORS = [
   "#a743a7",
   "pink",
 ];
+export const DUMMY_DATA = {
+  "2024-03-15": [
+    { id: nanoid(), title: "Finish the application", color: "#e74c3c" },
+    { id: nanoid(), title: "Watch a movie", color: "#a743a7" },
+    { id: nanoid(), title: "Relax", color: "#3498db" },
+  ],
+};
