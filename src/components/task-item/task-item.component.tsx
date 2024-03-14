@@ -13,7 +13,7 @@ const TaskCard = styled.div<{ color?: string }>`
   background-color: #f8f8f8;
   color: black;
   border-left: 10px solid ${({ color }) => color || "#7b7777"};
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
   margin: 5px 0;
   padding: 8px;
   border-radius: 8px;
@@ -22,6 +22,7 @@ const TaskCard = styled.div<{ color?: string }>`
   display: flex;
   justify-content: space-between;
   align-items: center;
+  font-size: 18px;
 `;
 
 const Button = styled.button`
