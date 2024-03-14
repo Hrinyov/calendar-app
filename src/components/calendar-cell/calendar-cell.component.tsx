@@ -2,12 +2,14 @@ import { FC } from "react";
 import styled from "styled-components";
 import { CalendarDayProps } from "./calendar-cell.types";
 import { TaskList } from "../task-list/task-list.component";
-import { transformDateToKey } from "../../utils/calendarUtils";
+import { transformDateToKey } from "../../utils/calendar-utils";
 import { AddTask } from "../add-task/add-task.component";
 import { useAppSelector } from "../../store/store";
 import { Holiday } from "../holiday/holiday.component";
 
-const DayCell = styled.div<{ istoday: boolean }>`
+const DayCell = styled.div.withConfig({
+  shouldForwardProp: (prop) => !["selected", "isSelectedMonth"].includes(prop),
+})<{ selected: boolean; isSelectedMonth: boolean }>`
   border: 2px solid #a19d9d82;
   border-radius: 10px;
   min-height: 100px;
@@ -17,7 +19,8 @@ const DayCell = styled.div<{ istoday: boolean }>`
   align-items: start;
   padding: 10px;
   position: relative;
-  background-color: ${({ istoday }) => (istoday ? "#ffffffa5" : "#ffffff6f")};
+  background-color: ${({ selected }) => (selected ? "#ffffffa5" : "#ffffff6f")};
+  opacity: ${({ isSelectedMonth }) => (isSelectedMonth ? 1 : 0.5)};
 `;
 
 const DayHeader = styled.div`
@@ -29,24 +32,29 @@ const DayHeader = styled.div`
 
 const HeaderItem = styled.span`
   color: white;
-  display:inline;
+  display: inline;
   font-weight: 700;
   font-size: large;
 `;
 
-export const CalendarDay: FC<CalendarDayProps> = ({ date, today }) => {
-  const holidays= useAppSelector((state) => state.holidays);
+export const CalendarDay: FC<CalendarDayProps> = ({
+  date,
+  isToday,
+  isSelectedMonth,
+}) => {
+  const holidays = useAppSelector((state) => state.holidays);
   const dayKey = transformDateToKey(date);
   const holidayName = holidays[dayKey];
+
   return (
-    <DayCell istoday={today}>
+    <DayCell selected={isToday} isSelectedMonth={isSelectedMonth}>
       <DayHeader>
         <HeaderItem>{date.getDate()}</HeaderItem>
         <HeaderItem>
           <AddTask dayKey={dayKey} />
         </HeaderItem>
       </DayHeader>
-       {holidayName && <Holiday name={holidayName} />}
+      {holidayName && <Holiday name={holidayName} />}
       <TaskList arrayKey={dayKey} />
     </DayCell>
   );
