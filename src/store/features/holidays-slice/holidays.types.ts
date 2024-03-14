@@ -1,0 +1,20 @@
+export interface HolidayApiResponse {
+  date: string;
+  localName: string;
+  name: string;
+  countryCode: string;
+  fixed: boolean;
+  global: boolean;
+  counties: string[] | null;
+  launchYear: number | null;
+  types: string[];
+}
+
+export interface HolidaysState {
+  [date: string]: string;
+}
+
+export interface FetchHolidaysArg {
+  year: number;
+  countryCode: string;
+}
