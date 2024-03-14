@@ -1,7 +1,11 @@
 import { FC, useEffect } from "react";
 import styled from "styled-components";
 import { CalendarDay } from "../calendar-cell/calendar-cell.component";
-import { generateCalendarDays, isToday } from "../../utils/calendarUtils";
+import {
+  generateCalendarDays,
+  isSelectedMonth,
+  isToday,
+} from "../../utils/calendar-utils";
 import { fetchHolidays } from "../../store/features/holidays-slice/holidays-thunks";
 import { useAppDispatch, useAppSelector } from "../../store/store";
 import {
@@ -67,7 +71,8 @@ export const CalendarGrid: FC = () => {
               <CalendarDay
                 key={date.toISOString()}
                 date={date}
-                today={isToday(date)}
+                isToday={isToday(date)}
+                isSelectedMonth={isSelectedMonth(date, currentDate)}
               />
             );
           })}
