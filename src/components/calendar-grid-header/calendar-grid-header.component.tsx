@@ -3,6 +3,7 @@ import styled from "styled-components";
 import { DAYS_OF_WEEK, MONTH_NAMES } from "../../utils/constants/constants";
 import { useAppDispatch, useAppSelector } from "../../store/store";
 import { adjustMonth } from "../../store/features/calendar-slice/calendar-slice";
+import { SearchTasks } from "../search-tasks/search-tasks.component";
 
 const DaysHeader = styled.div`
   display: grid;
@@ -60,6 +61,7 @@ export const Header: FC = () => {
         <Title>{`${currentMonthName} ${currentYear}`}</Title>
         <NavButton onClick={handleNextMonth}>&gt;</NavButton>
       </HeaderContainer>
+      <SearchTasks />
       <DaysHeader>
         {DAYS_OF_WEEK.map((dayName) => (
           <div key={dayName}>{dayName}</div>
