@@ -22,6 +22,10 @@ export const isToday = (date: Date) => {
   );
 };
 
+export const isSelectedMonth = (date: Date, currentDate: Date) => {
+  return date.getMonth() === currentDate.getMonth();
+}
+
 export const transformDateToKey = (date: Date): string => {
   const year = date.getFullYear();
   const month = date.getMonth() + 1;
