@@ -2,7 +2,8 @@ import { FC, useEffect } from "react";
 import styled from "styled-components";
 import { CalendarDay } from "../calendar-cell/calendar-cell.component";
 import { generateCalendarDays, isToday } from "../../utils/calendarUtils";
-import { useAppDispatch } from "../../store/store";
+import { fetchHolidays } from "../../store/features/holidays-slice/holidays-thunks";
+import { useAppDispatch, useAppSelector } from "../../store/store";
 import {
   initDailyTaskArray,
   moveTaskOutArray,
@@ -18,14 +19,16 @@ const Grid = styled.div`
 `;
 
 export const CalendarGrid: FC = () => {
+  const currentDateStr = useAppSelector((state) => state.calendar.currentDate);
+  const currentDate = new Date(currentDateStr);
   const dispatch = useAppDispatch();
-  const currentDate = new Date();
   const days = generateCalendarDays(currentDate);
 
   useEffect(() => {
     const year = currentDate.getFullYear();
     const month = currentDate.getMonth() + 1;
     dispatch(initDailyTaskArray({ year, month }));
+    dispatch(fetchHolidays({ year, countryCode: "US" }));
   }, [currentDate, dispatch]);
 
   const onDragEnd = (result: DropResult) => {
