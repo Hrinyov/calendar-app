@@ -16,7 +16,7 @@ export const HolidaysSlice = createSlice({
   extraReducers: (builder) => {
     builder.addCase(
       fetchHolidays.fulfilled,
-      (state, action: PayloadAction<HolidaysState>) => {
+      (_, action: PayloadAction<HolidaysState>) => {
         return action.payload;
       }
     );
